@@ -1,160 +1,145 @@
-       <!DOCTYPE html>
+   <!DOCTYPE html>
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SHIVAM 2026 | ONE UI EDITION</title>
+    <title>SHIVAM 2026 | SECURE STORAGE</title>
     <style>
-        :root { 
-            --samsung-blue: #0376ff; 
-            --glass: rgba(255, 255, 255, 0.1); 
-            --dark-glass: rgba(0, 0, 0, 0.7);
-        }
+        :root { --samsung-blue: #0376ff; --glass: rgba(255, 255, 255, 0.1); --dark: rgba(0, 0, 0, 0.85); }
         body { 
-            background: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1964&auto=format&fit=crop') no-repeat center center fixed; 
-            background-size: cover; color: #fff; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; margin: 0; overflow: hidden;
+            background: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe') no-repeat center center fixed; 
+            background-size: cover; color: #fff; font-family: 'Segoe UI', sans-serif; margin: 0; overflow: hidden;
             display: flex; justify-content: center; align-items: center; min-height: 100vh;
         }
-        #brightness-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: black; opacity: 0; pointer-events: none; z-index: 1000; }
-        
         .samsung-container { 
-            background: var(--dark-glass); backdrop-filter: blur(40px); border: 1.5px solid rgba(255,255,255,0.1); 
-            padding: 25px; border-radius: 50px; width: 90%; max-width: 420px; height: 80vh;
-            box-shadow: 0 40px 100px rgba(0,0,0,0.8); display: flex; flex-direction: column; position: relative;
-            animation: appScale 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: var(--dark); backdrop-filter: blur(40px); border-radius: 45px; 
+            width: 90%; max-width: 420px; height: 85vh; padding: 25px; display: flex; flex-direction: column;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.8); border: 1px solid rgba(255,255,255,0.1);
         }
-
-        @keyframes appScale { from { transform: scale(0.85); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-
-        /* One UI Style Icons */
-        .app-grid { 
-            display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; 
-            margin-top: 30px; padding: 10px; overflow-y: auto; flex-grow: 1;
-        }
-
-        .app-icon { 
-            text-align: center; cursor: pointer; transition: transform 0.2s;
-        }
-        .app-icon:active { transform: scale(0.9); }
+        .app-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 30px; overflow-y: auto; }
+        .app-icon { text-align: center; cursor: pointer; }
+        .icon-box { width: 70px; height: 70px; background: #1a1a1a; border-radius: 22px; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; font-size: 2rem; border: 1px solid #333; }
         
-        .icon-shape { 
-            width: 65px; height: 65px; background: linear-gradient(145deg, #1e1e1e, #111);
-            border-radius: 22px; margin: 0 auto 8px; display: flex; align-items: center; justify-content: center;
-            font-size: 2rem; box-shadow: 0 10px 20px rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.05);
+        /* File List Design */
+        #file-list { flex-grow: 1; overflow-y: auto; margin-top: 15px; padding-right: 5px; }
+        .file-item { 
+            background: rgba(255,255,255,0.05); border-radius: 20px; padding: 15px; margin-bottom: 12px; 
+            border: 1px solid #333; position: relative; animation: slideUp 0.3s ease;
         }
-
-        .app-label { font-size: 0.75rem; font-weight: 500; color: #eee; letter-spacing: 0.3px; }
-
-        /* Dashboard Header */
-        .one-ui-header { text-align: left; padding: 20px 10px; margin-bottom: 10px; }
-        #time-big { font-size: 3.5rem; font-weight: 300; margin: 0; color: #fff; }
-        #date-small { font-size: 1rem; color: #aaa; margin: -5px 0 0 5px; font-weight: 400; }
-
-        /* Premium Buttons */
-        .one-ui-btn { 
-            background: var(--samsung-blue); color: #fff; border: none; padding: 16px; 
-            font-weight: 600; cursor: pointer; border-radius: 20px; width: 100%; margin-top: 15px;
-            transition: 0.3s; font-size: 1rem;
-        }
-        .one-ui-btn:active { opacity: 0.8; transform: scale(0.98); }
-
-        /* View Containers */
-        #dashboard, #note-view, #settings-view { display: none; height: 100%; flex-direction: column; }
-
-        /* File Cards */
-        .file-card { 
-            background: rgba(255,255,255,0.05); padding: 15px; border-radius: 25px; 
-            margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.05); position: relative;
-        }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .index-no { background: var(--samsung-blue); color: white; padding: 2px 8px; border-radius: 8px; font-size: 0.7rem; margin-right: 10px; font-weight: bold; }
+        .btn { background: var(--samsung-blue); color: #fff; border: none; padding: 15px; border-radius: 20px; width: 100%; font-weight: 600; cursor: pointer; margin-top: 10px; }
+        iframe, img { width: 100%; border-radius: 15px; margin-top: 10px; border: none; }
     </style>
 </head>
 <body onload="initSystem()">
-    <div id="brightness-overlay"></div>
     <div class="samsung-container">
-        <div id="lock-screen" style="text-align:center; margin: auto;">
-            <div id="lock-time" style="font-size: 4rem; font-weight: 200; margin-bottom: 40px;">00:00</div>
-            <input type="password" id="pin" style="background:rgba(255,255,255,0.05); border:none; color:#fff; font-size:2rem; width:160px; text-align:center; border-radius:25px; padding:15px; margin-bottom:20px;" maxlength="4" placeholder="PIN">
-            <button class="one-ui-btn" onclick="unlock()" style="width: auto; padding: 15px 40px;">Unlock</button>
-        </div>
-
         <div id="dashboard">
-            <div class="one-ui-header">
-                <h1 id="time-big">00:00</h1>
-                <p id="date-small">Tuesday, Feb 10</p>
-            </div>
-            <div class="app-grid" id="app-list">
-                </div>
-            <div style="padding: 10px;">
-                <div style="background:rgba(255,255,255,0.05); height:5px; width:40px; border-radius:10px; margin:0 auto;" onclick="openSettings()"></div>
-            </div>
+            <h1 id="clock" style="font-size: 3rem; font-weight: 300; margin: 20px 0 0 10px;">00:00</h1>
+            <p id="date" style="color: #888; margin: -5px 0 30px 15px;"></p>
+            <div class="app-grid" id="folder-grid"></div>
         </div>
 
-        <div id="note-view">
-            <div style="display:flex; align-items: center; padding: 10px 0;">
-                <span onclick="backToDash()" style="font-size: 1.5rem; cursor:pointer;">〈</span>
-                <h2 id="folder-title" style="margin: 0 0 0 15px; font-weight: 500;">Folder</h2>
+        <div id="folder-view" style="display:none; height: 100%; flex-direction: column;">
+            <div style="display:flex; align-items: center; margin-bottom: 20px;">
+                <span onclick="goBack()" style="font-size: 1.8rem; cursor:pointer;">〈</span>
+                <h2 id="folder-name" style="margin-left: 20px; font-weight: 500;">Folder</h2>
             </div>
-            <div style="overflow-y:auto; flex-grow: 1; padding: 10px 0;" id="file-list">
-                </div>
-            <div style="padding: 10px 0;">
-                <input type="file" id="fileInp" style="display:none;" onchange="saveData()">
-                <button class="one-ui-btn" onclick="document.getElementById('fileInp').click()">+ Add File</button>
+            
+            <div id="file-list"></div>
+            
+            <div style="padding-top: 15px;">
+                <input type="file" id="filePicker" style="display:none;" onchange="handleFile()">
+                <button class="btn" onclick="document.getElementById('filePicker').click()">+ Upload File / Photo</button>
             </div>
         </div>
     </div>
 
     <script>
+        let currentFolder = "";
+        const folders = ["STUDY", "BOOKS", "NOTES", "GALLERY", "TECHNICAL"];
+
         function initSystem() {
-            updateTime();
-            // Default One UI Setup
-            if(!localStorage.getItem("folder_order")) {
-                localStorage.setItem("folder_order", JSON.stringify(["Gallery", "Notes", "Books", "Study", "Music", "Settings"]));
-            }
+            updateClock();
+            renderFolders();
         }
 
-        function updateTime() {
+        function updateClock() {
             const now = new Date();
-            const timeStr = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', hour12: false});
-            if(document.getElementById('time-big')) document.getElementById('time-big').innerText = timeStr;
-            if(document.getElementById('lock-time')) document.getElementById('lock-time').innerText = timeStr;
-            document.getElementById('date-small').innerText = now.toLocaleDateString([], {weekday:'long', day:'numeric', month:'short'});
-            setTimeout(updateTime, 1000);
+            document.getElementById('clock').innerText = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', hour12: false});
+            document.getElementById('date').innerText = now.toLocaleDateString([], {weekday:'long', day:'numeric', month:'short'});
+            setTimeout(updateClock, 1000);
         }
 
-        function unlock() {
-            if(document.getElementById('pin').value === "2026") {
-                document.getElementById('lock-screen').style.display="none";
-                document.getElementById('dashboard').style.display="flex";
-                renderApps();
-            } else { alert("Try Again"); }
-        }
-
-        function renderApps() {
-            let apps = JSON.parse(localStorage.getItem("folder_order"));
-            const icons = { "Gallery":"🖼️", "Notes":"📝", "Books":"📚", "Study":"🎓", "Music":"🎵", "Settings":"⚙️" };
-            document.getElementById('app-list').innerHTML = apps.map(app => `
-                <div class="app-icon" onclick="openApp('${app}')">
-                    <div class="icon-shape">${icons[app] || "📁"}</div>
-                    <div class="app-label">${app}</div>
+        function renderFolders() {
+            document.getElementById('folder-grid').innerHTML = folders.map(f => `
+                <div class="app-icon" onclick="openFolder('${f}')">
+                    <div class="icon-box">${f === 'GALLERY' ? '🖼️' : '📂'}</div>
+                    <small style="font-weight:500;">${f}</small>
                 </div>`).join("");
         }
 
-        function openApp(name) {
-            if(name === "Settings") { openSettings(); return; }
-            document.getElementById('dashboard').style.display="none";
-            document.getElementById('note-view').style.display="flex";
-            document.getElementById('folder-title').innerText = name;
+        function openFolder(name) {
             currentFolder = name;
-            // Load Data logic...
+            document.getElementById('dashboard').style.display = "none";
+            document.getElementById('folder-view').style.display = "flex";
+            document.getElementById('folder-name').innerText = name;
+            loadStoredFiles();
         }
 
-        function backToDash() {
-            document.getElementById('note-view').style.display="none";
-            document.getElementById('dashboard').style.display="flex";
+        function goBack() {
+            document.getElementById('folder-view').style.display = "none";
+            document.getElementById('dashboard').style.display = "block";
         }
-        
-        function openSettings() { alert("Settings Opening..."); }
+
+        function handleFile() {
+            const file = document.getElementById('filePicker').files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                // Persistent Storage (shivam_v18_data)
+                let db = JSON.parse(localStorage.getItem("shivam_v18_data") || "[]");
+                
+                const newEntry = {
+                    id: Date.now(),
+                    folder: currentFolder,
+                    type: file.type.includes('image') ? 'img' : 'pdf',
+                    name: file.name,
+                    content: e.target.result,
+                    date: new Date().toLocaleDateString()
+                };
+
+                db.push(newEntry);
+                localStorage.setItem("shivam_v18_data", JSON.stringify(db));
+                loadStoredFiles();
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function loadStoredFiles() {
+            let db = JSON.parse(localStorage.getItem("shivam_v18_data") || "[]");
+            let filtered = db.filter(x => x.folder === currentFolder);
+            
+            document.getElementById('file-list').innerHTML = filtered.map((x, index) => `
+                <div class="file-item">
+                    <span class="index-no">File ${index + 1}</span>
+                    <span style="font-size: 0.8rem; color: #888;">${x.name}</span>
+                    <span onclick="deleteFile(${x.id})" style="float:right; color:red; cursor:pointer;">×</span>
+                    ${x.type === 'img' ? `<img src="${x.content}">` : `<iframe src="${x.content}" style="height:300px;"></iframe>`}
+                </div>`).join("");
+        }
+
+        function deleteFile(id) {
+            if(confirm("Delete karsu?")) {
+                let db = JSON.parse(localStorage.getItem("shivam_v18_data") || "[]");
+                db = db.filter(x => x.id !== id);
+                localStorage.setItem("shivam_v18_data", JSON.stringify(db));
+                loadStoredFiles();
+            }
+        }
     </script>
 </body>
 </html>
-       
+    
