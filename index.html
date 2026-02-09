@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+       <!DOCTYPE html>
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
@@ -6,95 +6,86 @@
     <title>SHIVAM 2026 | ELITE VAULT</title>
     <style>
         :root { --gold: #ffcc00; --bg: #050505; --glass: rgba(255, 255, 255, 0.05); }
-        body { background: var(--bg); color: #fff; font-family: 'Segoe UI', serif; margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; overflow-x: hidden; }
-        
-        .container { background: var(--glass); backdrop-filter: blur(10px); border: 1px solid rgba(255,204,0,0.3); padding: 40px; border-radius: 25px; text-align: center; width: 90%; max-width: 450px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); transition: 0.5s; }
-        
-        h1 { font-size: 2.5rem; letter-spacing: 8px; color: var(--gold); text-shadow: 0 0 15px rgba(255,204,0,0.4); margin-bottom: 5px; }
-        .tagline { font-size: 0.8rem; letter-spacing: 3px; color: #888; margin-bottom: 30px; }
-
-        input, textarea, select { width: 100%; background: rgba(0,0,0,0.5); border: 1px solid #333; color: #fff; padding: 15px; margin: 10px 0; border-radius: 12px; outline: none; font-size: 1rem; transition: 0.3s; }
-        input:focus { border-color: var(--gold); box-shadow: 0 0 10px rgba(255,204,0,0.2); }
-        
-        .btn { background: var(--gold); color: #000; border: none; padding: 15px; font-weight: bold; cursor: pointer; width: 100%; border-radius: 12px; font-size: 1rem; text-transform: uppercase; letter-spacing: 2px; margin-top: 10px; box-shadow: 0 5px 15px rgba(255,204,0,0.3); }
-        .btn:active { transform: scale(0.98); }
-
-        #success-screen { display: none; animation: fadeIn 1s ease-in-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-        .mission-card { background: rgba(255,204,0,0.1); border-left: 4px solid var(--gold); padding: 15px; margin: 20px 0; border-radius: 8px; text-align: left; }
-        #history { text-align: left; margin-top: 30px; max-height: 300px; overflow-y: auto; }
-        .note-item { background: #111; padding: 15px; border-radius: 10px; margin-bottom: 10px; border: 1px solid #222; }
+        body { background: var(--bg); color: #fff; font-family: 'Segoe UI', serif; margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; box-sizing: border-box; }
+        .container { background: var(--glass); backdrop-filter: blur(10px); border: 1px solid rgba(255,204,0,0.3); padding: 30px; border-radius: 25px; text-align: center; width: 100%; max-width: 500px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        h1 { font-size: 2.2rem; letter-spacing: 5px; color: var(--gold); margin-bottom: 20px; }
+        input, textarea, select { width: 100%; background: rgba(0,0,0,0.5); border: 1px solid #333; color: #fff; padding: 12px; margin: 8px 0; border-radius: 10px; outline: none; box-sizing: border-box; }
+        .btn { background: var(--gold); color: #000; border: none; padding: 12px; font-weight: bold; cursor: pointer; width: 100%; border-radius: 10px; text-transform: uppercase; margin-top: 10px; }
+        #success-screen { display: none; text-align: left; }
+        .note-item { background: #111; padding: 15px; border-radius: 10px; margin-bottom: 12px; border: 1px solid #222; position: relative; }
+        .delete-btn { position: absolute; top: 10px; right: 10px; background: #ff4444; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 0.7rem; padding: 5px 8px; }
+        .file-link { color: var(--gold); text-decoration: none; font-weight: bold; display: block; margin-top: 5px; }
     </style>
 </head>
 <body>
 
     <div class="container" id="main-box">
         <div id="lock-screen">
-            <h1>SHIVAM</h1>
-            <div class="tagline">ESTABLISHED 2026</div>
-            <p style="color: #666; font-size: 0.9rem;">ENTER ACCESS KEY</p>
-            <input type="password" id="pin" maxlength="4" placeholder="••••" style="text-align:center; font-size: 2rem; letter-spacing: 10px;">
+            <h1>SHIVAM 2026</h1>
+            <input type="password" id="pin" maxlength="4" placeholder="••••" style="text-align:center; font-size: 2rem;">
             <button class="btn" onclick="verify()">Unlock Vault</button>
         </div>
 
         <div id="success-screen">
-            <h2 style="color: var(--gold); margin: 0;">ACCESS GRANTED</h2>
-            <p style="color: #888; font-size: 0.8rem; margin-bottom: 20px;">WELCOME BACK, SHIVAM</p>
+            <h2 style="color: var(--gold);">VAULT OPEN</h2>
             
-            <div class="mission-card">
-                <small style="color: var(--gold); font-weight: bold;">CURRENT MISSION</small>
-                <div style="font-size: 1.1rem; margin-top: 5px;">RAILWAY EXAM CRACK 2026</div>
-            </div>
-
             <select id="topic">
                 <option>RRB JE TECHNICAL</option>
+                <option>E-BOOKS / PDF LINKS</option>
                 <option>GENERAL SCIENCE</option>
-                <option>MATHS & REASONING</option>
-                <option>DAILY PROGRESS</option>
+                <option>DAILY NOTES</option>
             </select>
-            <textarea id="note" placeholder="Write your strategy or notes..."></textarea>
-            <button class="btn" onclick="save()">Save Note</button>
+            <textarea id="note" placeholder="Write note or paste Ebook link here..."></textarea>
+            <button class="btn" onclick="save()">Save to Vault</button>
 
-            <div id="history"></div>
+            <div id="history" style="margin-top: 30px;"></div>
         </div>
     </div>
 
     <script>
         function verify() {
-            if(document.getElementById("pin").value === "2026") {
-                document.getElementById("lock-screen").style.display = "none";
-                document.getElementById("success-screen").style.display = "block";
-                document.getElementById("main-box").style.maxWidth = "600px";
+            if(document.getElementById('pin').value === "2026") {
+                document.getElementById('lock-screen').style.display = "none";
+                document.getElementById('success-screen').style.display = "block";
                 load();
-            } else {
-                alert("ACCESS DENIED!");
-            }
+            } else { alert("ACCESS DENIED!"); }
         }
 
         function save() {
-            let notes = JSON.parse(localStorage.getItem("shivam_v5") || "[]");
-            let newNote = {
-                t: document.getElementById("topic").value,
-                n: document.getElementById("note").value,
-                d: new Date().toLocaleString()
-            };
-            if(!newNote.n) return;
-            notes.unshift(newNote);
-            localStorage.setItem("shivam_v5", JSON.stringify(notes));
+            let notes = JSON.parse(localStorage.getItem("shivam_v6") || "[]");
+            let text = document.getElementById("note").value;
+            if(!text) return;
+            
+            notes.unshift({ t: document.getElementById("topic").value, n: text, d: new Date().toLocaleString() });
+            localStorage.setItem("shivam_v6", JSON.stringify(notes));
             document.getElementById("note").value = "";
             load();
         }
 
+        function deleteNote(index) {
+            if(confirm("Kya aap ise delete karna chahte hain?")) {
+                let notes = JSON.parse(localStorage.getItem("shivam_v6") || "[]");
+                notes.splice(index, 1);
+                localStorage.setItem("shivam_v6", JSON.stringify(notes));
+                load();
+            }
+        }
+
         function load() {
-            let notes = JSON.parse(localStorage.getItem("shivam_v5") || "[]");
-            document.getElementById("history").innerHTML = notes.map(x => `
+            let notes = JSON.parse(localStorage.getItem("shivam_v6") || "[]");
+            document.getElementById("history").innerHTML = notes.map((x, i) => {
+                let isLink = x.n.includes("http");
+                return `
                 <div class="note-item">
-                    <small style="color:var(--gold)">${x.t} • ${x.d}</small>
-                    <p style="margin: 8px 0 0 0; line-height: 1.5; color: #ddd;">${x.n}</p>
-                </div>
-            `).join("");
+                    <button class="delete-btn" onclick="deleteNote(${i})">DEL</button>
+                    <small style="color:var(--gold)">${x.t}</small>
+                    ${isLink ? `<a href="${x.n}" target="_blank" class="file-link">🔗 Open File / Ebook</a>` : `<p style="margin:8px 0 0 0; color:#ddd;">${x.n}</p>`}
+                    <div style="font-size:0.7rem; color:#555; margin-top:10px;">${x.d}</div>
+                </div>`;
+            }).join("");
         }
     </script>
 </body>
 </html>
+ 
+    
