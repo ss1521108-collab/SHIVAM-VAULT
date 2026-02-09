@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SHIVAM 2026 | VAULT</title>
+    <style>
+        body { background: #050505; color: #fff; font-family: serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .box { text-align: center; border: 2px solid #ffcc00; padding: 40px; border-radius: 15px; }
+        input { background: transparent; border: 1px solid #ffcc00; color: #fff; padding: 10px; font-size: 1.5rem; width: 100px; text-align: center; margin: 20px 0; outline: none; }
+        .btn { background: #ffcc00; color: #000; border: none; padding: 10px 25px; font-weight: bold; cursor: pointer; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <div id="lock" class="box">
+        <h1>SHIVAM 2026</h1>
+        <p>ENTER PIN</p>
+        <input type="password" id="pin" maxlength="4" placeholder="****"><br>
+        <button class="btn" onclick="verify()">UNLOCK</button>
+    </div>
+    <script>
+        function verify() {
+            if(document.getElementById("pin").value === "2026") {
+                alert("Welcome Shivam! Vault Opening...");
+                // Yahan aap apna dashboard code bhi jodh sakte hain
+            } else { alert("Wrong PIN!"); }
+        }
+    </script>
+</body>
+</html>
