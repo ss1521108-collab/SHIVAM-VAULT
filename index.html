@@ -5,26 +5,53 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SHIVAM 2026 | VAULT</title>
     <style>
-        body { background: #050505; color: #fff; font-family: serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .box { text-align: center; border: 2px solid #ffcc00; padding: 40px; border-radius: 15px; }
-        input { background: transparent; border: 1px solid #ffcc00; color: #fff; padding: 10px; font-size: 1.5rem; width: 100px; text-align: center; margin: 20px 0; outline: none; }
-        .btn { background: #ffcc00; color: #000; border: none; padding: 10px 25px; font-weight: bold; cursor: pointer; border-radius: 5px; }
+        :root { --gold: #ffcc00; --bg: #050505; }
+        body { background: var(--bg); color: #fff; font-family: serif; margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .container { border: 2px solid var(--gold); padding: 30px; border-radius: 15px; text-align: center; width: 90%; max-width: 500px; }
+        input, textarea, select { width: 100%; background: #1a1a1a; border: 1px solid var(--gold); color: #fff; padding: 10px; margin: 10px 0; border-radius: 5px; box-sizing: border-box; }
+        .btn { background: var(--gold); color: #000; border: none; padding: 12px 25px; font-weight: bold; cursor: pointer; width: 100%; border-radius: 5px; }
+        #dashboard { display: none; text-align: left; }
     </style>
 </head>
 <body>
-    <div id="lock" class="box">
-        <h1>SHIVAM 2026</h1>
-        <p>ENTER PIN</p>
-        <input type="password" id="pin" maxlength="4" placeholder="****"><br>
-        <button class="btn" onclick="verify()">UNLOCK</button>
+    <div class="container">
+        <div id="lock">
+            <h1>SHIVAM 2026</h1>
+            <input type="password" id="pin" maxlength="4" placeholder="ENTER PIN">
+            <button class="btn" onclick="verify()">UNLOCK</button>
+        </div>
+        <div id="dashboard">
+            <h2>PRIVATE NOTES</h2>
+            <select id="topic">
+                <option>RRB JE TECHNICAL</option>
+                <option>RAILWAY SCIENCE</option>
+                <option>MATHS / REASONING</option>
+            </select>
+            <textarea id="note" placeholder="Apne notes yahan likhein..."></textarea>
+            <button class="btn" onclick="save()">SAVE NOTE</button>
+            <div id="history" style="margin-top: 20px;"></div>
+        </div>
     </div>
     <script>
         function verify() {
             if(document.getElementById("pin").value === "2026") {
-                alert("Welcome Shivam! Vault Opening...");
-                // Yahan aap apna dashboard code bhi jodh sakte hain
+                document.getElementById("lock").style.display = "none";
+                document.getElementById("dashboard").style.display = "block";
+                load();
             } else { alert("Wrong PIN!"); }
+        }
+        function save() {
+            let notes = JSON.parse(localStorage.getItem("v_notes") || "[]");
+            notes.unshift({ t: document.getElementById("topic").value, n: document.getElementById("note").value, d: new Date().toLocaleDateString() });
+            localStorage.setItem("v_notes", JSON.stringify(notes));
+            document.getElementById("note").value = "";
+            load();
+        }
+        function load() {
+            let notes = JSON.parse(localStorage.getItem("v_notes") || "[]");
+            document.getElementById("history").innerHTML = notes.map(x => `<p><b>${x.t} (${x.d}):</b><br>${x.n}</p><hr style="border:0.1px solid #333">`).join("");
         }
     </script>
 </body>
 </html>
+
