@@ -1,5 +1,4 @@
-     
-      <!DOCTYPE html>
+     <!DOCTYPE html>
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
@@ -9,21 +8,20 @@
         :root { --gold: #ffcc00; --glass: rgba(0, 0, 0, 0.85); }
         body { 
             background: url('https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?q=80&w=1974&auto=format&fit=crop') no-repeat center center fixed; 
-            background-size: cover; color: #fff; font-family: 'Segoe UI', sans-serif; margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; transition: 0.3s;
+            background-size: cover; color: #fff; font-family: 'Segoe UI', sans-serif; margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh;
         }
         #brightness-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: black; opacity: 0; pointer-events: none; z-index: 999; }
         .container { background: var(--glass); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); padding: 25px; border-radius: 30px; width: 95%; max-width: 500px; box-shadow: 0 25px 50px rgba(0,0,0,0.8); text-align: center; position: relative; }
         .folder-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 20px; }
         .folder { cursor: pointer; transition: 0.3s; }
         .btn { background: var(--gold); color: #000; border: none; padding: 12px; font-weight: bold; cursor: pointer; width: 100%; border-radius: 12px; text-transform: uppercase; margin-top: 10px; }
-        .settings-panel { display: none; text-align: left; animation: fadeIn 0.3s; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        .note-card { background: rgba(255,255,255,0.05); padding: 15px; border-radius: 15px; margin-bottom: 10px; border: 1px solid #333; position: relative; }
+        .note-card { background: rgba(255,255,255,0.05); padding: 15px; border-radius: 15px; margin-bottom: 10px; border: 1px solid #333; position: relative; overflow: hidden; }
+        .preview-img { max-width: 100%; border-radius: 10px; margin-top: 10px; border: 1px solid #444; }
+        iframe { width: 100%; height: 300px; border: none; border-radius: 10px; margin-top: 10px; background: white; }
     </style>
 </head>
 <body>
     <div id="brightness-overlay"></div>
-
     <div class="container">
         <div id="lock-screen">
             <h1 style="color: var(--gold);">SHIVAM 2026</h1>
@@ -33,44 +31,39 @@
 
         <div id="dashboard" style="display: none;">
             <div style="display: flex; justify-content: space-between; align-items: center;">
-                <h2 style="margin:0;">VAULT</h2>
+                <h2 style="margin:0;">MY SYSTEM</h2>
                 <span onclick="openSettings()" style="cursor:pointer; font-size: 1.5rem;">⚙️</span>
             </div>
-            <div class="folder-grid">
-                <div class="folder" onclick="openFolder('STUDY')"><span style="font-size:3rem;">📂</span><br><small>STUDY</small></div>
-                <div class="folder" onclick="openFolder('FILES')"><span style="font-size:3rem;">📁</span><br><small>FILES</small></div>
-                <div class="folder" onclick="openSettings()"><span style="font-size:3rem;">⚙️</span><br><small>SETTINGS</small></div>
+            <div class="folder-grid" id="folder-list">
+                <div class="folder" onclick="openFolder('STUDY')"><span>📂</span><br><small>STUDY</small></div>
+                <div class="folder" onclick="openFolder('E-BOOKS')"><span>📚</span><br><small>E-BOOKS</small></div>
+                <div class="folder" onclick="addNewFolder()" style="color:var(--gold);"><span>➕</span><br><small>NEW FOLDER</small></div>
             </div>
-        </div>
-
-        <div id="settings-view" class="settings-panel">
-            <button onclick="backToDash()" style="background:#333; color:#fff; border:none; padding:5px 15px; border-radius:20px; cursor:pointer; margin-bottom:15px;">← BACK</button>
-            <h2 style="color:var(--gold);">SYSTEM SETTINGS</h2>
-            
-            <label>Change Wallpaper:</label>
-            <input type="file" id="bgInput" accept="image/*" onchange="changeBG()">
-            
-            <label>Brightness Light:</label>
-            <input type="range" min="0" max="80" value="0" oninput="changeLight(this.value)">
-            
-            <label>Change Lock PIN:</label>
-            <input type="password" id="newPin" maxlength="4" placeholder="Enter New 4-Digit PIN">
-            <button class="btn" onclick="updatePin()">UPDATE PIN</button>
         </div>
 
         <div id="note-view" style="display:none; text-align:left;">
             <button onclick="backToDash()" style="background:#333; color:#fff; border:none; padding:5px 15px; border-radius:20px; cursor:pointer; margin-bottom:15px;">← BACK</button>
-            <h2 id="folder-title" style="color:var(--gold);"></h2>
-            <input type="file" id="fileInput">
+            <h2 id="folder-title" style="color:var(--gold); margin:0;"></h2>
+            <input type="file" id="fileInput" accept="image/*, application/pdf">
             <textarea id="noteInput" placeholder="Write note..." style="width:100%; height:80px; background:rgba(255,255,255,0.1); color:#fff; border-radius:10px; padding:10px; margin:10px 0; border:1px solid #444;"></textarea>
-            <button class="btn" onclick="saveData()">SAVE</button>
-            <div id="note-list" style="margin-top:20px; max-height:300px; overflow-y:auto;"></div>
+            <button class="btn" onclick="saveData()">SAVE TO FOLDER</button>
+            <div id="note-list" style="margin-top:20px; max-height:400px; overflow-y:auto;"></div>
+        </div>
+
+        <div id="settings-view" style="display:none; text-align:left;">
+            <button onclick="backToDash()" style="background:#333; color:#fff; border:none; padding:5px 15px; border-radius:20px; cursor:pointer; margin-bottom:15px;">← BACK</button>
+            <h2 style="color:var(--gold);">SETTINGS</h2>
+            <label>Change Wallpaper:</label>
+            <input type="file" accept="image/*" onchange="changeBG(event)">
+            <label style="display:block; margin-top:15px;">Brightness:</label>
+            <input type="range" min="0" max="80" value="0" oninput="changeLight(this.value)" style="width:100%;">
+            <button class="btn" onclick="alert('PIN can be changed in code logic')">PIN: 2026</button>
         </div>
     </div>
 
     <script>
         let currentFolder = "";
-        let masterPin = localStorage.getItem("vault_pin") || "2026";
+        let masterPin = "2026";
 
         function unlock() {
             if(document.getElementById('pin').value === masterPin) {
@@ -78,42 +71,6 @@
                 document.getElementById('dashboard').style.display="block";
                 loadSettings();
             } else { alert("WRONG PIN"); }
-        }
-
-        function openSettings() {
-            document.getElementById('dashboard').style.display="none";
-            document.getElementById('settings-view').style.display="block";
-        }
-
-        function changeBG() {
-            const file = document.getElementById('bgInput').files[0];
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                document.body.style.backgroundImage = `url(${e.target.result})`;
-                localStorage.setItem("vault_bg", e.target.result);
-            };
-            reader.readAsDataURL(file);
-        }
-
-        function changeLight(val) {
-            document.getElementById('brightness-overlay').style.opacity = val / 100;
-            localStorage.setItem("vault_light", val);
-        }
-
-        function updatePin() {
-            let n = document.getElementById('newPin').value;
-            if(n.length === 4) {
-                localStorage.setItem("vault_pin", n);
-                masterPin = n;
-                alert("PIN Updated Successfully!");
-            } else { alert("Enter 4 digits!"); }
-        }
-
-        function loadSettings() {
-            const bg = localStorage.getItem("vault_bg");
-            if(bg) document.body.style.backgroundImage = `url(${bg})`;
-            const light = localStorage.getItem("vault_light");
-            if(light) document.getElementById('brightness-overlay').style.opacity = light / 100;
         }
 
         function openFolder(name) {
@@ -125,39 +82,84 @@
         }
 
         function backToDash() {
-            document.getElementById('settings-view').style.display="none";
-            document.getElementById('note-view').style.display="none";
+            document.querySelectorAll('.container > div').forEach(div => div.style.display="none");
             document.getElementById('dashboard').style.display="block";
         }
 
+        function openSettings() {
+            document.getElementById('dashboard').style.display="none";
+            document.getElementById('settings-view').style.display="block";
+        }
+
+        function addNewFolder() {
+            let name = prompt("Naye Folder ka naam:");
+            if(name) {
+                let folders = JSON.parse(localStorage.getItem("custom_folders") || "[]");
+                folders.push(name);
+                localStorage.setItem("custom_folders", JSON.stringify(folders));
+                renderFolders();
+            }
+        }
+
+        function renderFolders() {
+            let folders = JSON.parse(localStorage.getItem("custom_folders") || "[]");
+            let html = `<div class="folder" onclick="openFolder('STUDY')"><span>📂</span><br><small>STUDY</small></div>
+                        <div class="folder" onclick="openFolder('E-BOOKS')"><span>📚</span><br><small>E-BOOKS</small></div>`;
+            folders.forEach(f => {
+                html += `<div class="folder" onclick="openFolder('${f}')"><span>📂</span><br><small>${f}</small></div>`;
+            });
+            html += `<div class="folder" onclick="addNewFolder()" style="color:var(--gold);"><span>➕</span><br><small>NEW FOLDER</small></div>`;
+            document.getElementById('folder-list').innerHTML = html;
+        }
+
         function saveData() {
-            let f = document.getElementById('fileInput');
-            let n = document.getElementById('noteInput');
-            let db = JSON.parse(localStorage.getItem("shivam_v9") || "[]");
-            if(f.files[0]) {
-                const r = new FileReader();
-                r.onload = (e) => {
-                    db.unshift({ folder: currentFolder, type:'file', name: f.files[0].name, data: e.target.result });
-                    localStorage.setItem("shivam_v9", JSON.stringify(db));
-                    f.value=""; loadData();
+            let f = document.getElementById('fileInput').files[0];
+            let n = document.getElementById('noteInput').value;
+            let db = JSON.parse(localStorage.getItem("shivam_v10") || "[]");
+
+            if(f) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    db.unshift({ folder: currentFolder, type: f.type.includes('image') ? 'img' : 'pdf', name: f.name, data: e.target.result });
+                    localStorage.setItem("shivam_v10", JSON.stringify(db));
+                    document.getElementById('fileInput').value="";
+                    loadData();
                 };
-                r.readAsDataURL(f.files[0]);
-            } else {
-                db.unshift({ folder: currentFolder, type:'note', text: n.value });
-                localStorage.setItem("shivam_v9", JSON.stringify(db));
-                n.value=""; loadData();
+                reader.readAsDataURL(f);
+            } else if(n) {
+                db.unshift({ folder: currentFolder, type: 'note', text: n });
+                localStorage.setItem("shivam_v10", JSON.stringify(db));
+                document.getElementById('noteInput').value="";
+                loadData();
             }
         }
 
         function loadData() {
-            let db = JSON.parse(localStorage.getItem("shivam_v9") || "[]");
+            let db = JSON.parse(localStorage.getItem("shivam_v10") || "[]");
             document.getElementById('note-list').innerHTML = db.filter(x => x.folder === currentFolder).map(x => `
                 <div class="note-card">
-                    ${x.type === 'file' ? `📄 ${x.name} <br> <a href="${x.data}" download="${x.name}" style="color:var(--gold)">Download</a>` : x.text}
+                    <small style="color:var(--gold)">${x.name || 'NOTE'}</small><br>
+                    ${x.type === 'img' ? `<img src="${x.data}" class="preview-img">` : 
+                      x.type === 'pdf' ? `<iframe src="${x.data}"></iframe>` : `<p>${x.text}</p>`}
                 </div>
             `).join("");
+        }
+
+        function changeBG(e) {
+            const reader = new FileReader();
+            reader.onload = () => { document.body.style.backgroundImage = `url(${reader.result})`; localStorage.setItem("v_bg", reader.result); };
+            reader.readAsDataURL(e.target.files[0]);
+        }
+
+        function changeLight(v) { document.getElementById('brightness-overlay').style.opacity = v / 100; localStorage.setItem("v_light", v); }
+        
+        function loadSettings() {
+            renderFolders();
+            if(localStorage.getItem("v_bg")) document.body.style.backgroundImage = `url(${localStorage.getItem("v_bg")})`;
+            if(localStorage.getItem("v_light")) changeLight(localStorage.getItem("v_light"));
         }
     </script>
 </body>
 </html>
-              
+
+      
