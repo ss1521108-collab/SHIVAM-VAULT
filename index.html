@@ -138,6 +138,46 @@
                 localStorage.setItem("shivam_v18_data", JSON.stringify(db));
                 loadStoredFiles();
             }
+          // --- FIREBASE START ---
+  // 1. Firebase Libraries
+  const fbAppScript = document.createElement('script');
+  fbAppScript.src = "https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js";
+  document.head.appendChild(fbAppScript);
+
+  const fbDbScript = document.createElement('script');
+  fbDbScript.src = "https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js";
+  document.head.appendChild(fbDbScript);
+
+  fbDbScript.onload = function() {
+    // 2. यहाँ अपना कॉपी किया हुआ Firebase Config डालें
+    const firebaseConfig = {
+      apiKey: "AIzaSyA6PT3ECgCIHa8nvj90HuP5gQVsHW5jY-Q",
+      authDomain: "shivamvault-f4ac3.firebaseapp.com",
+      projectId: "shivamvault-f4ac3",
+      storageBucket: "shivamvault-f4ac3.appspot.com",
+      messagingSenderId:"980961736233",
+      appId: "1:980961736233:web:1e5c02e12813909ed9ce38",
+      databaseURL: "https://shivamvault-f4ac3-default-rtdb.firebaseio.com"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+
+    // वॉलपेपर क्लाउड से लोड करना
+    database.ref('wallpaper').on('value', (snapshot) => {
+      const url = snapshot.val();
+      if (url) {
+        document.body.style.backgroundImage = `url('${url}')`;
+        document.body.style.backgroundSize = "cover";
+      }
+    });
+
+    // वॉलपेपर सेव करने के लिए फंक्शन (इसे अपने वॉलपेपर चेंज बटन पर लगाएं)
+    window.saveWallpaper = function(url) {
+      database.ref('wallpaper').set(url);
+    }
+  };
+  // --- FIREBASE END ---
         }
     </script>
 </body>
