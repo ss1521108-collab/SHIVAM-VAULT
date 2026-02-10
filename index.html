@@ -1,51 +1,166 @@
-<script>
-    let currentFolder = "";
-    const folders = ["STUDY", "BOOKS", "NOTES", "GALLERY", "TECHNICAL"];
-    
-    // यहाँ अपना मनपसंद PIN सेट करें
-    const MY_SECRET_PIN = "1234"; 
-
-    // Firebase Config (वही जो पहले था)
-    const firebaseConfig = {
-        apiKey: "AIzaSyA6PT3ECgCIHa8nvj90HuP5gQVsHW5jY-Q",
-        authDomain: "shivamvault-f4ac3.firebaseapp.com",
-        projectId: "shivamvault-f4ac3",
-        storageBucket: "shivamvault-f4ac3.firebasestorage.app",
-        messagingSenderId: "980961736233",
-        appId: "1:980961736233:web:1e5c02e12813909ed9ce38",
-        databaseURL: "https://shivamvault-f4ac3-default-rtdb.firebaseio.com"
-    };
-    
-    firebase.initializeApp(firebaseConfig);
-    const database = firebase.database();
-
-    function initSystem() {
-        // वेबसाइट खुलते ही सबसे पहले PIN मांगेगा
-        checkPin();
-        updateClock();
-        renderFolders();
-        
-        database.ref('wallpaper').on('value', (snapshot) => {
-            const url = snapshot.val();
-            if (url) {
-                document.body.style.backgroundImage = `url('${url}')`;
-                document.body.style.backgroundSize = "cover";
-            }
-        });
-    }
-
-    // PIN चेक करने का फंक्शन
-    function checkPin() {
-        const userPin = prompt("SHIVAM VAULT: कृपया अपना PIN डालें");
-        if (userPin === MY_SECRET_PIN) {
-            alert("स्वागत है शिवम!");
-            document.querySelector('.samsung-container').style.display = "flex";
-        } else {
-            alert("गलत PIN! फिर से कोशिश करें।");
-            window.location.reload(); // पेज दोबारा लोड हो जाएगा
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SHIVAM 2026 | SECURE CLOUD STORAGE</title>
+    <style>
+        :root { --samsung-blue: #0376ff; --glass: rgba(255, 255, 255, 0.1); --dark: rgba(0, 0, 0, 0.85); }
+        body { 
+            background: #111 no-repeat center center fixed; background-size: cover; 
+            color: #fff; font-family: 'Segoe UI', sans-serif; margin: 0; overflow: hidden;
+            display: flex; justify-content: center; align-items: center; min-height: 100vh;
         }
-    }
+        .samsung-container { 
+            background: var(--dark); backdrop-filter: blur(40px); border-radius: 45px; 
+            width: 90%; max-width: 420px; height: 85vh; padding: 25px; display: flex; flex-direction: column;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.8); border: 1px solid rgba(255,255,255,0.1);
+        }
+        .app-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 30px; overflow-y: auto; }
+        .app-icon { text-align: center; cursor: pointer; }
+        .icon-box { width: 70px; height: 70px; background: #1a1a1a; border-radius: 22px; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; font-size: 2rem; border: 1px solid #333; }
+        #file-list { flex-grow: 1; overflow-y: auto; margin-top: 15px; padding-right: 5px; }
+        .file-item { background: rgba(255,255,255,0.05); border-radius: 20px; padding: 15px; margin-bottom: 12px; border: 1px solid #333; position: relative; }
+        .btn { background: var(--samsung-blue); color: #fff; border: none; padding: 15px; border-radius: 20px; width: 100%; font-weight: 600; cursor: pointer; margin-top: 10px; }
+        iframe, img { width: 100%; border-radius: 15px; margin-top: 10px; border: none; }
+    </style>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
+</head>
+<body onload="initSystem()">
+    <div class="samsung-container" style="display:none;">
+        <div id="dashboard">
+            <h1 id="clock" style="font-size: 3rem; font-weight: 300; margin: 20px 0 0 10px;">00:00</h1>
+            <p id="date" style="color: #888; margin: -5px 0 30px 15px;"></p>
+            <div class="app-grid" id="folder-grid"></div>
+        </div>
+        <div id="folder-view" style="display:none; height: 100%; flex-direction: column;">
+            <div style="display:flex; align-items: center; margin-bottom: 20px;">
+                <span onclick="goBack()" style="font-size: 1.8rem; cursor:pointer;">〈</span>
+                <h2 id="folder-name" style="margin-left: 20px; font-weight: 500;">Folder</h2>
+            </div>
+            <div id="file-list"></div>
+            <div style="padding-top: 15px;">
+                <input type="file" id="filePicker" style="display:none;" onchange="handleFileUpload()">
+                <button class="btn" onclick="document.getElementById('filePicker').click()">+ Upload File / PDF</button>
+            </div>
+        </div>
+    </div>
 
-    // बाकी सारे फंक्शन (updateClock, renderFolders, handleFile आदि) वही रहेंगे जो पहले थे
-    // ... (पुराना बाकी कोड इसके नीचे पेस्ट कर दें)
-</script>
+    <script>
+        let currentFolder = "";
+        const folders = ["STUDY", "BOOKS", "NOTES", "GALLERY", "TECHNICAL"];
+        const MY_PIN = "1234"; // अपना पासवर्ड यहाँ बदलें
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyA6PT3ECgCIHa8nvj90HuP5gQVsHW5jY-Q",
+            authDomain: "shivamvault-f4ac3.firebaseapp.com",
+            projectId: "shivamvault-f4ac3",
+            storageBucket: "shivamvault-f4ac3.firebasestorage.app",
+            messagingSenderId: "980961736233",
+            appId: "1:980961736233:web:1e5c02e12813909ed9ce38",
+            databaseURL: "https://shivamvault-f4ac3-default-rtdb.firebaseio.com"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        function initSystem() {
+            const pin = prompt("SHIVAM VAULT: अपना PIN डालें");
+            if(pin === MY_PIN) {
+                document.querySelector('.samsung-container').style.display = "flex";
+                updateClock();
+                renderFolders();
+                loadFromCloud(); // क्लाउड से सारा डेटा लाओ
+            } else {
+                alert("गलत PIN!");
+                window.location.reload();
+            }
+        }
+
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('clock').innerText = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', hour12: false});
+            document.getElementById('date').innerText = now.toLocaleDateString([], {weekday:'long', day:'numeric', month:'short'});
+            setTimeout(updateClock, 1000);
+        }
+
+        function renderFolders() {
+            document.getElementById('folder-grid').innerHTML = folders.map(f => `
+                <div class="app-icon" onclick="openFolder('${f}')">
+                    <div class="icon-box">${f === 'GALLERY' ? '🖼️' : '📂'}</div>
+                    <small>${f}</small>
+                </div>`).join("");
+        }
+
+        function openFolder(name) {
+            currentFolder = name;
+            document.getElementById('dashboard').style.display = "none";
+            document.getElementById('folder-view').style.display = "flex";
+            document.getElementById('folder-name').innerText = name;
+            displayFiles();
+        }
+
+        function goBack() {
+            document.getElementById('folder-view').style.display = "none";
+            document.getElementById('dashboard').style.display = "block";
+        }
+
+        // फाइल को क्लाउड (Firebase) पर भेजने का फंक्शन
+        function handleFileUpload() {
+            const file = document.getElementById('filePicker').files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const fileData = {
+                    id: Date.now(),
+                    name: file.name,
+                    content: e.target.result,
+                    type: file.type.includes('pdf') ? 'pdf' : 'img',
+                    folder: currentFolder
+                };
+                
+                // क्लाउड पर फाइल सेव करें
+                database.ref('myVault/' + fileData.id).set(fileData);
+                
+                // अगर फोटो है तो वॉलपेपर भी सेट कर दो
+                if(currentFolder === 'GALLERY' && fileData.type === 'img') {
+                    database.ref('wallpaper').set(fileData.content);
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // क्लाउड से फाइलें और वॉलपेपर लोड करना
+        function loadFromCloud() {
+            // वॉलपेपर लोड करें
+            database.ref('wallpaper').on('value', snap => {
+                if(snap.val()) document.body.style.backgroundImage = `url(${snap.val()})`;
+            });
+
+            // सारी फाइलें लोड करें
+            database.ref('myVault').on('value', snap => {
+                const data = snap.val();
+                window.cloudFiles = data ? Object.values(data) : [];
+                displayFiles();
+            });
+        }
+
+        function displayFiles() {
+            const list = document.getElementById('file-list');
+            const filtered = (window.cloudFiles || []).filter(x => x.folder === currentFolder);
+            list.innerHTML = filtered.map(x => `
+                <div class="file-item">
+                    <b>${x.name}</b>
+                    <span onclick="deleteFile(${x.id})" style="float:right; color:red; cursor:pointer;">×</span>
+                    ${x.type === 'img' ? `<img src="${x.content}">` : `<iframe src="${x.content}" style="height:200px;"></iframe>`}
+                </div>`).join("");
+        }
+
+        function deleteFile(id) {
+            if(confirm("Delete karsu?")) {
+                database.ref('myVault/' + id).remove();
+            }
+        }
+    </script>
+</body>
+</html>
