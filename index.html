@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="hi">
 <head>
@@ -39,7 +40,6 @@
             <p id="date" style="color: #888; margin: -5px 0 30px 15px;"></p>
             <div class="app-grid" id="folder-grid"></div>
         </div>
-
         <div id="folder-view" style="display:none; height: 100%; flex-direction: column;">
             <div style="display:flex; align-items: center; margin-bottom: 20px;">
                 <span onclick="goBack()" style="font-size: 1.8rem; cursor:pointer;">〈</span>
@@ -48,7 +48,7 @@
             <div id="file-list"></div>
             <div style="padding-top: 15px;">
                 <input type="file" id="filePicker" style="display:none;" onchange="handleFile()">
-                <button class="btn" onclick="document.getElementById('filePicker').click()">+ Upload File / Photo</button>
+                <button class="btn" onclick="document.getElementById('filePicker').click()">+ Upload Photo</button>
             </div>
         </div>
     </div>
@@ -57,7 +57,7 @@
         let currentFolder = "";
         const folders = ["STUDY", "BOOKS", "NOTES", "GALLERY", "TECHNICAL"];
 
-        // Firebase Configuration
+        // आपका Firebase कॉन्फ़िगरेशन
         const firebaseConfig = {
             apiKey: "AIzaSyA6PT3ECgCIHa8nvj90HuP5gQVsHW5jY-Q",
             authDomain: "shivamvault-f4ac3.firebaseapp.com",
@@ -115,7 +115,6 @@
         function handleFile() {
             const file = document.getElementById('filePicker').files[0];
             if (!file) return;
-
             const reader = new FileReader();
             reader.onload = function(e) {
                 let db = JSON.parse(localStorage.getItem("shivam_v18_data") || "[]");
@@ -130,11 +129,10 @@
                 db.push(newEntry);
                 localStorage.setItem("shivam_v18_data", JSON.stringify(db));
                 
-                // अगर फोटो गैलरी में है, तो उसे वॉलपेपर बनाओ और क्लाउड पर सेव करो
+                // अगर GALLERY में फोटो अपलोड की, तो उसे क्लाउड वॉलपेपर बनाओ
                 if(currentFolder === "GALLERY" && newEntry.type === 'img') {
                     database.ref('wallpaper').set(newEntry.content);
                 }
-                
                 loadStoredFiles();
             };
             reader.readAsDataURL(file);
@@ -148,17 +146,17 @@
                     <span class="index-no">File ${index + 1}</span>
                     <span style="font-size: 0.8rem; color: #888;">${x.name}</span>
                     <span onclick="deleteFile(${x.id})" style="float:right; color:red; cursor:pointer;">×</span>
-                    ${x.type === 'img' ? `<img src="${x.content}" onclick="setAsWallpaper('${x.content}')" style="cursor:pointer;" title="Click to set wallpaper">` : `<iframe src="${x.content}" style="height:300px;"></iframe>`}
+                    ${x.type === 'img' ? `<img src="${x.content}" onclick="setCloudWallpaper('${x.content}')" style="cursor:pointer;" title="वॉलपेपर बनाने के लिए क्लिक करें">` : `<iframe src="${x.content}" style="height:300px;"></iframe>`}
                 </div>`).join("");
         }
 
-        function setAsWallpaper(url) {
+        function setCloudWallpaper(url) {
             database.ref('wallpaper').set(url);
-            alert("Wallpaper क्लाउड पर सेव हो गया!");
+            alert("वॉलपेपर क्लाउड पर सुरक्षित हो गया!");
         }
 
         function deleteFile(id) {
-            if(confirm("Delete karsu?")) {
+            if(confirm("डिलीट करें?")) {
                 let db = JSON.parse(localStorage.getItem("shivam_v18_data") || "[]");
                 db = db.filter(x => x.id !== id);
                 localStorage.setItem("shivam_v18_data", JSON.stringify(db));
