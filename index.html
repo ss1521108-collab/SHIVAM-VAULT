@@ -1,4 +1,4 @@
-   <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
@@ -19,19 +19,18 @@
         .app-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 30px; overflow-y: auto; }
         .app-icon { text-align: center; cursor: pointer; }
         .icon-box { width: 70px; height: 70px; background: #1a1a1a; border-radius: 22px; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; font-size: 2rem; border: 1px solid #333; }
-        
-        /* File List Design */
         #file-list { flex-grow: 1; overflow-y: auto; margin-top: 15px; padding-right: 5px; }
         .file-item { 
             background: rgba(255,255,255,0.05); border-radius: 20px; padding: 15px; margin-bottom: 12px; 
             border: 1px solid #333; position: relative; animation: slideUp 0.3s ease;
         }
         @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        
         .index-no { background: var(--samsung-blue); color: white; padding: 2px 8px; border-radius: 8px; font-size: 0.7rem; margin-right: 10px; font-weight: bold; }
         .btn { background: var(--samsung-blue); color: #fff; border: none; padding: 15px; border-radius: 20px; width: 100%; font-weight: 600; cursor: pointer; margin-top: 10px; }
         iframe, img { width: 100%; border-radius: 15px; margin-top: 10px; border: none; }
     </style>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
 </head>
 <body onload="initSystem()">
     <div class="samsung-container">
@@ -46,9 +45,7 @@
                 <span onclick="goBack()" style="font-size: 1.8rem; cursor:pointer;">〈</span>
                 <h2 id="folder-name" style="margin-left: 20px; font-weight: 500;">Folder</h2>
             </div>
-            
             <div id="file-list"></div>
-            
             <div style="padding-top: 15px;">
                 <input type="file" id="filePicker" style="display:none;" onchange="handleFile()">
                 <button class="btn" onclick="document.getElementById('filePicker').click()">+ Upload File / Photo</button>
@@ -60,9 +57,31 @@
         let currentFolder = "";
         const folders = ["STUDY", "BOOKS", "NOTES", "GALLERY", "TECHNICAL"];
 
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyA6PT3ECgCIHa8nvj90HuP5gQVsHW5jY-Q",
+            authDomain: "shivamvault-f4ac3.firebaseapp.com",
+            projectId: "shivamvault-f4ac3",
+            storageBucket: "shivamvault-f4ac3.appspot.com",
+            messagingSenderId:"980961736233",
+            appId: "1:980961736233:web:1e5c02e12813909ed9ce38",
+            databaseURL: "https://shivamvault-f4ac3-default-rtdb.firebaseio.com"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
         function initSystem() {
             updateClock();
             renderFolders();
+            
+            // क्लाउड से वॉलपेपर लोड करना
+            database.ref('wallpaper').on('value', (snapshot) => {
+                const url = snapshot.val();
+                if (url) {
+                    document.body.style.backgroundImage = `url('${url}')`;
+                    document.body.style.backgroundSize = "cover";
+                }
+            });
         }
 
         function updateClock() {
@@ -99,9 +118,7 @@
 
             const reader = new FileReader();
             reader.onload = function(e) {
-                // Persistent Storage (shivam_v18_data)
                 let db = JSON.parse(localStorage.getItem("shivam_v18_data") || "[]");
-                
                 const newEntry = {
                     id: Date.now(),
                     folder: currentFolder,
@@ -110,9 +127,14 @@
                     content: e.target.result,
                     date: new Date().toLocaleDateString()
                 };
-
                 db.push(newEntry);
                 localStorage.setItem("shivam_v18_data", JSON.stringify(db));
+                
+                // अगर फोटो गैलरी में है, तो उसे वॉलपेपर बनाओ और क्लाउड पर सेव करो
+                if(currentFolder === "GALLERY" && newEntry.type === 'img') {
+                    database.ref('wallpaper').set(newEntry.content);
+                }
+                
                 loadStoredFiles();
             };
             reader.readAsDataURL(file);
@@ -121,14 +143,18 @@
         function loadStoredFiles() {
             let db = JSON.parse(localStorage.getItem("shivam_v18_data") || "[]");
             let filtered = db.filter(x => x.folder === currentFolder);
-            
             document.getElementById('file-list').innerHTML = filtered.map((x, index) => `
                 <div class="file-item">
                     <span class="index-no">File ${index + 1}</span>
                     <span style="font-size: 0.8rem; color: #888;">${x.name}</span>
                     <span onclick="deleteFile(${x.id})" style="float:right; color:red; cursor:pointer;">×</span>
-                    ${x.type === 'img' ? `<img src="${x.content}">` : `<iframe src="${x.content}" style="height:300px;"></iframe>`}
+                    ${x.type === 'img' ? `<img src="${x.content}" onclick="setAsWallpaper('${x.content}')" style="cursor:pointer;" title="Click to set wallpaper">` : `<iframe src="${x.content}" style="height:300px;"></iframe>`}
                 </div>`).join("");
+        }
+
+        function setAsWallpaper(url) {
+            database.ref('wallpaper').set(url);
+            alert("Wallpaper क्लाउड पर सेव हो गया!");
         }
 
         function deleteFile(id) {
@@ -138,48 +164,7 @@
                 localStorage.setItem("shivam_v18_data", JSON.stringify(db));
                 loadStoredFiles();
             }
-          // --- FIREBASE START ---
-  // 1. Firebase Libraries
-  const fbAppScript = document.createElement('script');
-  fbAppScript.src = "https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js";
-  document.head.appendChild(fbAppScript);
-
-  const fbDbScript = document.createElement('script');
-  fbDbScript.src = "https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js";
-  document.head.appendChild(fbDbScript);
-
-  fbDbScript.onload = function() {
-    // 2. यहाँ अपना कॉपी किया हुआ Firebase Config डालें
-    const firebaseConfig = {
-      apiKey: "AIzaSyA6PT3ECgCIHa8nvj90HuP5gQVsHW5jY-Q",
-      authDomain: "shivamvault-f4ac3.firebaseapp.com",
-      projectId: "shivamvault-f4ac3",
-      storageBucket: "shivamvault-f4ac3.appspot.com",
-      messagingSenderId:"980961736233",
-      appId: "1:980961736233:web:1e5c02e12813909ed9ce38",
-      databaseURL: "https://shivamvault-f4ac3-default-rtdb.firebaseio.com"
-    };
-
-    firebase.initializeApp(firebaseConfig);
-    const database = firebase.database();
-
-    // वॉलपेपर क्लाउड से लोड करना
-    database.ref('wallpaper').on('value', (snapshot) => {
-      const url = snapshot.val();
-      if (url) {
-        document.body.style.backgroundImage = `url('${url}')`;
-        document.body.style.backgroundSize = "cover";
-      }
-    });
-
-    // वॉलपेपर सेव करने के लिए फंक्शन (इसे अपने वॉलपेपर चेंज बटन पर लगाएं)
-    window.saveWallpaper = function(url) {
-      database.ref('wallpaper').set(url);
-    }
-  };
-  // --- FIREBASE END ---
         }
     </script>
 </body>
 </html>
-    
