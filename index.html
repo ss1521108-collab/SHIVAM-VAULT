@@ -1,234 +1,50 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SHIVAM VAULT | 5GB CLOUD - Secure Access</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Shivam Vault</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-            color: #fff;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .container {
-            background: rgba(15, 15, 35, 0.9);
-            border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
-            padding: 40px;
-            width: 100%;
-            max-width: 500px;
-            border: 1px solid rgba(100, 100, 255, 0.2);
-            text-align: center;
-        }
-
-        .logo {
-            font-size: 3rem;
-            color: #4cc9f0;
-            margin-bottom: 15px;
-        }
-
-        h1 {
-            font-size: 2.2rem;
-            margin-bottom: 10px;
-            background: linear-gradient(90deg, #4cc9f0, #4361ee);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .subtitle {
-            color: #a5b4fc;
-            margin-bottom: 30px;
-            font-size: 1.1rem;
-        }
-
-        .password-box {
-            margin: 30px 0;
-        }
-
-        .password-input {
-            width: 100%;
-            padding: 18px 20px;
-            background: rgba(255, 255, 255, 0.08);
-            border: 2px solid #4361ee;
-            border-radius: 12px;
-            color: white;
-            font-size: 1.1rem;
-            transition: all 0.3s;
-        }
-
-        .password-input:focus {
-            outline: none;
-            border-color: #4cc9f0;
-            box-shadow: 0 0 15px rgba(76, 201, 240, 0.4);
-            background: rgba(255, 255, 255, 0.12);
-        }
-
-        .unlock-btn {
-            background: linear-gradient(90deg, #4361ee, #3a0ca3);
-            color: white;
-            border: none;
-            padding: 18px 40px;
-            font-size: 1.2rem;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.3s;
-            width: 100%;
-            font-weight: bold;
-            letter-spacing: 1px;
-            margin-top: 10px;
-        }
-
-        .unlock-btn:hover {
-            background: linear-gradient(90deg, #4cc9f0, #4361ee);
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(67, 97, 238, 0.3);
-        }
-
-        .error-msg {
-            color: #f72585;
-            margin-top: 15px;
-            font-size: 0.95rem;
-            min-height: 20px;
-        }
-
-        .features {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .feature {
-            text-align: center;
-            padding: 10px;
-        }
-
-        .feature i {
-            font-size: 1.8rem;
-            color: #4cc9f0;
-            margin-bottom: 8px;
-        }
-
-        .footer {
-            margin-top: 25px;
-            color: #6c757d;
-            font-size: 0.9rem;
-        }
-
-        @media (max-width: 600px) {
-            .container {
-                padding: 25px;
-            }
-            
-            h1 {
-                font-size: 1.8rem;
-            }
-        }
+        body { background: #0f0c29; color: white; text-align: center; padding: 100px; }
+        .box { background: #1e1e3c; padding: 40px; border-radius: 20px; display: inline-block; }
+        input { padding: 15px; width: 250px; margin: 20px; border: 2px solid blue; background: #333; color: white; }
+        button { background: blue; color: white; padding: 15px 40px; border: none; border-radius: 10px; margin: 10px; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="logo">
-            <i class="fas fa-cloud"></i>
-        </div>
-        
-        <h1>SHIVAM VAULT</h1>
-        <p class="subtitle">5GB SECURE CLOUD STORAGE | GALAXY S24 FE | SHIVAM V</p>
-        
-        <div class="password-box">
-            <input type="password" 
-                   class="password-input" 
-                   id="password" 
-                   placeholder="Enter your vault password" 
-                   autocomplete="off">
-        </div>
-        
-        <button class="unlock-btn" onclick="checkPassword()">
-            <i class="fas fa-lock-open"></i> UNLOCK VAULT
-        </button>
-        
-        <div class="error-msg" id="error-msg"></div>
-        
-        <div class="features">
-            <div class="feature">
-                <i class="fas fa-shield-alt"></i>
-                <p>Secure</p>
-            </div>
-            <div class="feature">
-                <i class="fas fa-bolt"></i>
-                <p>Fast</p>
-            </div>
-            <div class="feature">
-                <i class="fas fa-hdd"></i>
-                <p>5GB Free</p>
-            </div>
-        </div>
-        
-        <div class="footer">
-            <p>© 2024 Shivam Vault | GSI Integration Ready</p>
-        </div>
+    <div id="login" class="box">
+        <h1>🔒 SHIVAM VAULT</h1>
+        <p>5GB CLOUD STORAGE</p>
+        <input type="password" id="pass" placeholder="Enter password (shivam2026)">
+        <br>
+        <button onclick="login()">UNLOCK</button>
+        <p>GALAXY S24 FE | SHIVAM V</p>
     </div>
-
+    
+    <div id="dashboard" class="box" style="display:none">
+        <h1>☁️ SHIVAM VAULT DASHBOARD</h1>
+        <p>5GB Cloud Active | Storage: 1.8GB/5GB</p>
+        <button>📤 Upload</button>
+        <button>📁 Files</button>
+        <button>⚙️ Settings</button>
+        <br>
+        <button onclick="logout()" style="background:red; margin-top:20px">Logout</button>
+        <p>GALAXY S24 FE | SHIVAM V</p>
+    </div>
+    
     <script>
-        // सेट पासवर्ड - आप इसे बदल सकते हैं
-        const CORRECT_PASSWORD = "shivam2026";
-        
-        function checkPassword() {
-            const input = document.getElementById("password").value;
-            const errorMsg = document.getElementById("error-msg");
-            
-            if (input === CORRECT_PASSWORD) {
-                // पासवर्ड सही है - डैशबोर्ड पर रीडायरेक्ट
-                window.location.href = "dashboard.html";
+        function login() {
+            if(document.getElementById('pass').value == 'shivam2026') {
+                document.getElementById('login').style.display = 'none';
+                document.getElementById('dashboard').style.display = 'inline-block';
             } else {
-                errorMsg.textContent = "❌ Incorrect password! Please try again.";
-                document.getElementById("password").value = "";
-                document.getElementById("password").focus();
-                
-                // वाइब्रेशन इफेक्ट
-                document.querySelector(".container").style.animation = "shake 0.5s";
-                setTimeout(() => {
-                    document.querySelector(".container").style.animation = "";
-                }, 500);
+                alert('Wrong password! Try: shivam2026');
             }
         }
         
-        // शेक एनिमेशन
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes shake {
-                0%, 100% { transform: translateX(0); }
-                10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
-                20%, 40%, 60%, 80% { transform: translateX(5px); }
-            }
-        `;
-        document.head.appendChild(style);
-        
-        // Enter key support
-        document.getElementById("password").addEventListener("keyup", function(event) {
-            if (event.key === "Enter") {
-                checkPassword();
-            }
-        });
-        
-        // पेज लोड होते ही पासवर्ड फील्ड पर फोकस
-        window.onload = function() {
-            document.getElementById("password").focus();
-        };
+        function logout() {
+            document.getElementById('dashboard').style.display = 'none';
+            document.getElementById('login').style.display = 'inline-block';
+            document.getElementById('pass').value = '';
+        }
     </script>
 </body>
 </html>
