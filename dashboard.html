@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SHIVAM VAULT Dashboard</title>
+    <style>
+        body { background: black; color: white; font-family: Arial; padding: 20px; }
+        .header { background: #1a1a2e; padding: 20px; border-radius: 10px; text-align: center; }
+        .btn { background: blue; color: white; padding: 10px 20px; border: none; margin: 10px; border-radius: 5px; }
+        .card { background: #222; padding: 15px; margin: 15px 0; border-radius: 10px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>☁️ SHIVAM VAULT DASHBOARD</h1>
+        <p>5GB Cloud Storage | GALAXY S24 FE | SHIVAM V</p>
+        <button class="btn" onclick="logout()">Logout</button>
+    </div>
+    
+    <div class="card">
+        <h3>📊 Storage Status</h3>
+        <p>1.8GB used of 5GB</p>
+        <div style="background:#333; height:20px; border-radius:10px;">
+            <div style="background:blue; width:35%; height:100%; border-radius:10px;"></div>
+        </div>
+    </div>
+    
+    <div style="text-align:center; margin:30px 0;">
+        <button class="btn">📤 Upload File</button>
+        <button class="btn">📁 My Files</button>
+        <button class="btn">⚙️ Settings</button>
+    </div>
+    
+    <div class="card">
+        <h3>📄 Recent Files</h3>
+        <p>• document.pdf - 12.5 MB</p>
+        <p>• photo.jpg - 4.2 MB</p>
+        <p>• video.mp4 - 150 MB</p>
+    </div>
+    
+    <script>
+        function logout() {
+            if(confirm('Logout?')) {
+                window.location.href = 'index.html';
+            }
+        }
+    </script>
+</body>
+</html>
