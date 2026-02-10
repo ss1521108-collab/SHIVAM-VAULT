@@ -3,228 +3,232 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SHIVAM VAULT | 5GB CLOUD</title>
+    <title>SHIVAM VAULT | 5GB CLOUD - Secure Access</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { --samsung-blue: #0376ff; --dark: rgba(0, 0, 0, 0.9); }
-        body { background: #111; color: #fff; font-family: 'Segoe UI', sans-serif; margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; overflow: hidden; }
-        
-        /* Lock Screen Style */
-        #lock-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 10000; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .lock-input { background: #222; border: 1px solid #444; color: white; padding: 15px; border-radius: 15px; width: 250px; text-align: center; font-size: 1.2rem; margin-bottom: 20px; outline: none; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-        /* Container */
-        .samsung-container { background: var(--dark); border-radius: 40px; width: 90%; max-width: 420px; height: 85vh; padding: 25px; display: flex; flex-direction: column; box-shadow: 0 40px 100px #000; border: 1px solid #333; position: relative; }
-        
-        /* Dashboard & Icons */
-        .app-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 30px; overflow-y: auto; }
-        .app-icon { text-align: center; cursor: pointer; transition: 0.2s; }
-        .app-icon:active { transform: scale(0.9); }
-        .icon-box { width: 70px; height: 70px; background: #1a1a1a; border-radius: 22px; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; font-size: 2rem; border: 1px solid #333; }
-        
-        /* Fast Upload Progress Bar */
-        #progress-container { width: 100%; background: #333; border-radius: 10px; margin: 10px 0; display: none; overflow: hidden; }
-        #progress-bar { width: 0%; height: 8px; background: var(--samsung-blue); border-radius: 10px; transition: width 0.2s; }
+        body {
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: #fff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
 
-        /* Views */
-        #file-list { flex-grow: 1; overflow-y: auto; margin-top: 15px; }
-        .file-item { background: #222; border-radius: 15px; padding: 15px; margin-bottom: 10px; border: 1px solid #444; position: relative; }
-        .btn { background: var(--samsung-blue); color: #fff; border: none; padding: 15px; border-radius: 20px; width: 100%; font-weight: 600; cursor: pointer; font-size: 1rem; }
-        #status { color: #00ff00; font-size: 0.8rem; text-align: center; margin-top: 5px; }
-        img { width: 100%; border-radius: 10px; margin-top: 10px; }
-        .download-btn { color: #fff; background: #333; display: block; text-align: center; padding: 8px; border-radius: 10px; text-decoration: none; margin-top: 10px; font-size: 0.9rem; border: 1px solid #555; }
-        
-        /* Settings */
-        #settings-view { display:none; flex-direction: column; height: 100%; }
-        .settings-item { background: #222; padding: 15px; border-radius: 15px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
-    </style>
-    
-    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-storage-compat.js"></script>
-</head>
-<body onload="initSystem()">
+        .container {
+            background: rgba(15, 15, 35, 0.9);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            padding: 40px;
+            width: 100%;
+            max-width: 500px;
+            border: 1px solid rgba(100, 100, 255, 0.2);
+            text-align: center;
+        }
 
-    <div id="lock-screen">
-        <h1 style="font-weight: 300; letter-spacing: 2px;">SHIVAM VAULT</h1>
-        <p style="color: #666; margin-bottom: 25px;">Enter Pin to Access Cloud</p>
-        <input type="password" id="passInput" class="lock-input" placeholder="••••" autofocus>
-        <button class="btn" style="width: 150px;" onclick="unlock()">Unlock</button>
-        <p id="lock-error" style="color: #ff4757; margin-top: 15px; display: none;">Wrong Password!</p>
-    </div>
+        .logo {
+            font-size: 3rem;
+            color: #4cc9f0;
+            margin-bottom: 15px;
+        }
 
-    <div class="samsung-container">
-        <div id="dashboard">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-                <h1 id="clock" style="font-size: 3rem; font-weight: 300; margin: 20px 0 0 10px;">00:00</h1>
-                <div class="icon-box" onclick="openSettings()" style="width: 45px; height: 45px; margin: 20px 10px 0 0; font-size: 1.2rem; cursor: pointer; border-radius: 15px;">⚙️</div>
-            </div>
-            <div class="app-grid" id="folder-grid"></div>
-        </div>
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #4cc9f0, #4361ee);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
 
-        <div id="folder-view" style="display:none; height: 100%; flex-direction: column;">
-            <div style="display:flex; align-items: center; margin-bottom: 20px;">
-                <span onclick="goBack()" style="font-size: 1.8rem; cursor:pointer; padding: 5px;">〈</span>
-                <h2 id="folder-name" style="margin-left: 15px; font-weight: 400;">Folder</h2>
-            </div>
+        .subtitle {
+            color: #a5b4fc;
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+        }
+
+        .password-box {
+            margin: 30px 0;
+        }
+
+        .password-input {
+            width: 100%;
+            padding: 18px 20px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 2px solid #4361ee;
+            border-radius: 12px;
+            color: white;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+        }
+
+        .password-input:focus {
+            outline: none;
+            border-color: #4cc9f0;
+            box-shadow: 0 0 15px rgba(76, 201, 240, 0.4);
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .unlock-btn {
+            background: linear-gradient(90deg, #4361ee, #3a0ca3);
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            font-size: 1.2rem;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+            font-weight: bold;
+            letter-spacing: 1px;
+            margin-top: 10px;
+        }
+
+        .unlock-btn:hover {
+            background: linear-gradient(90deg, #4cc9f0, #4361ee);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(67, 97, 238, 0.3);
+        }
+
+        .error-msg {
+            color: #f72585;
+            margin-top: 15px;
+            font-size: 0.95rem;
+            min-height: 20px;
+        }
+
+        .features {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .feature {
+            text-align: center;
+            padding: 10px;
+        }
+
+        .feature i {
+            font-size: 1.8rem;
+            color: #4cc9f0;
+            margin-bottom: 8px;
+        }
+
+        .footer {
+            margin-top: 25px;
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 25px;
+            }
             
-            <div id="file-list"></div>
-
-            <div style="padding-top: 10px;">
-                <div id="progress-container"><div id="progress-bar"></div></div>
-                <div id="status"></div>
-                
-                <input type="file" id="filePicker" style="display:none;" onchange="uploadToStorage()">
-                <button class="btn" onclick="document.getElementById('filePicker').click()">+ Upload to Cloud</button>
+            h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <i class="fas fa-cloud"></i>
+        </div>
+        
+        <h1>SHIVAM VAULT</h1>
+        <p class="subtitle">5GB SECURE CLOUD STORAGE | GALAXY S24 FE | SHIVAM V</p>
+        
+        <div class="password-box">
+            <input type="password" 
+                   class="password-input" 
+                   id="password" 
+                   placeholder="Enter your vault password" 
+                   autocomplete="off">
+        </div>
+        
+        <button class="unlock-btn" onclick="checkPassword()">
+            <i class="fas fa-lock-open"></i> UNLOCK VAULT
+        </button>
+        
+        <div class="error-msg" id="error-msg"></div>
+        
+        <div class="features">
+            <div class="feature">
+                <i class="fas fa-shield-alt"></i>
+                <p>Secure</p>
+            </div>
+            <div class="feature">
+                <i class="fas fa-bolt"></i>
+                <p>Fast</p>
+            </div>
+            <div class="feature">
+                <i class="fas fa-hdd"></i>
+                <p>5GB Free</p>
             </div>
         </div>
-
-        <div id="settings-view">
-            <div style="display:flex; align-items: center; margin-bottom: 20px;">
-                <span onclick="goBack()" style="font-size: 1.8rem; cursor:pointer; padding: 5px;">〈</span>
-                <h2 style="margin-left: 15px; font-weight: 400;">Settings</h2>
-            </div>
-            <div class="settings-item"><span>Owner</span><b>Shivam</b></div>
-            <div class="settings-item"><span>Cloud Capacity</span><span>5.0 GB</span></div>
-            <div class="settings-item"><span>Status</span><span style="color: #00ff00;">Active</span></div>
-            <button class="btn" style="background: #333; margin-top: auto;" onclick="location.reload()">🔒 Lock Vault</button>
+        
+        <div class="footer">
+            <p>© 2024 Shivam Vault | GSI Integration Ready</p>
         </div>
     </div>
 
     <script>
-        let currentFolder = "";
-        const folders = ["STUDY", "BOOKS", "NOTES", "GALLERY", "TECHNICAL"];
-        const VAULT_PASS = "shivam2026"; 
+        // सेट पासवर्ड - आप इसे बदल सकते हैं
+        const CORRECT_PASSWORD = "shivam2026";
         
-        // --- Firebase Config (Aapki Detail) ---
-        const firebaseConfig = {
-            apiKey: "AIzaSyA6PT3ECgCIHa8nvj90HuP5gQVsHW5jY-Q",
-            authDomain: "shivamvault-f4ac3.firebaseapp.com",
-            projectId: "shivamvault-f4ac3",
-            storageBucket: "shivamvault-f4ac3.firebasestorage.app",
-            databaseURL: "https://shivamvault-f4ac3-default-rtdb.firebaseio.com"
-        };
-        firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
-        const storage = firebase.storage();
-
-        // Security Logic
-        function unlock() {
-            const pass = document.getElementById('passInput').value;
-            if(pass === VAULT_PASS) {
-                document.getElementById('lock-screen').style.display = 'none';
+        function checkPassword() {
+            const input = document.getElementById("password").value;
+            const errorMsg = document.getElementById("error-msg");
+            
+            if (input === CORRECT_PASSWORD) {
+                // पासवर्ड सही है - डैशबोर्ड पर रीडायरेक्ट
+                window.location.href = "dashboard.html";
             } else {
-                document.getElementById('lock-error').style.display = 'block';
-                document.getElementById('passInput').value = "";
+                errorMsg.textContent = "❌ Incorrect password! Please try again.";
+                document.getElementById("password").value = "";
+                document.getElementById("password").focus();
+                
+                // वाइब्रेशन इफेक्ट
+                document.querySelector(".container").style.animation = "shake 0.5s";
+                setTimeout(() => {
+                    document.querySelector(".container").style.animation = "";
+                }, 500);
             }
         }
-
-        function initSystem() {
-            updateClock();
-            renderFolders();
-            loadCloudData();
-        }
-
-        function updateClock() {
-            const now = new Date();
-            document.getElementById('clock').innerText = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-            setTimeout(updateClock, 1000);
-        }
-
-        function renderFolders() {
-            document.getElementById('folder-grid').innerHTML = folders.map(f => `
-                <div class="app-icon" onclick="openFolder('${f}')">
-                    <div class="icon-box">${f === 'GALLERY' ? '🖼️' : (f === 'TECHNICAL' ? '🛠️' : '📂')}</div>
-                    <small style="color: #bbb;">${f}</small>
-                </div>`).join("");
-        }
-
-        function openFolder(name) {
-            currentFolder = name;
-            document.getElementById('dashboard').style.display = "none";
-            document.getElementById('settings-view').style.display = "none";
-            document.getElementById('folder-view').style.display = "flex";
-            document.getElementById('folder-name').innerText = name;
-            displayFiles();
-        }
-
-        function openSettings() {
-            document.getElementById('dashboard').style.display = "none";
-            document.getElementById('folder-view').style.display = "none";
-            document.getElementById('settings-view').style.display = "flex";
-        }
-
-        function goBack() {
-            document.getElementById('folder-view').style.display = "none";
-            document.getElementById('settings-view').style.display = "none";
-            document.getElementById('dashboard').style.display = "block";
-            document.getElementById('status').innerText = "";
-            document.getElementById('progress-container').style.display = "none";
-        }
-
-        // --- FAST UPLOAD LOGIC ---
-        function uploadToStorage() {
-            const file = document.getElementById('filePicker').files[0];
-            if (!file) return;
-
-            const status = document.getElementById('status');
-            const progBar = document.getElementById('progress-bar');
-            const progContainer = document.getElementById('progress-container');
-
-            progContainer.style.display = "block";
-            status.innerText = "Connecting...";
-
-            const storageRef = storage.ref('shivam_files/' + Date.now() + "_" + file.name);
-            const uploadTask = storageRef.put(file);
-
-            uploadTask.on('state_changed', 
-                (snapshot) => {
-                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                    progBar.style.width = progress + '%';
-                    status.innerText = "Fast Upload: " + Math.round(progress) + "%";
-                }, 
-                (err) => { alert("Error: " + err.message); }, 
-                () => {
-                    uploadTask.snapshot.ref.getDownloadURL().then((url) => {
-                        const fileInfo = {
-                            id: Date.now(),
-                            name: file.name,
-                            url: url,
-                            type: file.type.includes('pdf') ? 'pdf' : 'img',
-                            folder: currentFolder
-                        };
-                        database.ref('cloudVault/' + fileInfo.id).set(fileInfo);
-                        status.innerText = "Cloud Synced! ✅";
-                        setTimeout(() => { progContainer.style.display = "none"; progBar.style.width = "0%"; }, 2000);
-                    });
-                }
-            );
-        }
-
-        function loadCloudData() {
-            database.ref('cloudVault').on('value', snap => {
-                const data = snap.val();
-                window.cloudData = data ? Object.values(data) : [];
-                displayFiles();
-            });
-        }
-
-        function displayFiles() {
-            const list = document.getElementById('file-list');
-            if(!list) return;
-            const filtered = (window.cloudData || []).filter(x => x.folder === currentFolder);
-            list.innerHTML = filtered.length ? filtered.map(x => `
-                <div class="file-item">
-                    <b style="font-size: 0.9rem;">${x.name}</b>
-                    <span onclick="deleteFile('${x.id}')" style="float:right; color:#ff4757; cursor:pointer; font-size: 1.2rem;">×</span>
-                    ${x.type === 'img' ? `<img src="${x.url}">` : `<a href="${x.url}" target="_blank" class="download-btn">📖 View Document</a>`}
-                </div>`).join("") : `<p style="text-align:center; color:#555; margin-top:50px;">No files in ${currentFolder}</p>`;
-        }
-
-        function deleteFile(id) {
-            if(confirm("Kyu Shivam, ise delete kar dein?")) {
-                database.ref('cloudVault/' + id).remove();
+        
+        // शेक एनिमेशन
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes shake {
+                0%, 100% { transform: translateX(0); }
+                10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+                20%, 40%, 60%, 80% { transform: translateX(5px); }
             }
-        }
+        `;
+        document.head.appendChild(style);
+        
+        // Enter key support
+        document.getElementById("password").addEventListener("keyup", function(event) {
+            if (event.key === "Enter") {
+                checkPassword();
+            }
+        });
+        
+        // पेज लोड होते ही पासवर्ड फील्ड पर फोकस
+        window.onload = function() {
+            document.getElementById("password").focus();
+        };
     </script>
 </body>
 </html>
